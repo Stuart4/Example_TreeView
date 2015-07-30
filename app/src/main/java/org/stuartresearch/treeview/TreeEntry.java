@@ -10,6 +10,7 @@ public class TreeEntry {
     public String content = "";
     public TreeEntry parent = null;
     public ArrayList<TreeEntry> children = new ArrayList<>(5);
+    public boolean isExpanded = true;
 
     public TreeEntry(String content) {
         this.content = content;

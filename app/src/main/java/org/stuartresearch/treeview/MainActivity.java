@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 1; i < countries.length; i++) {
             TreeEntry entry = new TreeEntry(countries[i]);
 
-            if (i % 3 == 0)
+            if (i % 5 == 0)
                 parent = null;
 
             entry.parent = parent;

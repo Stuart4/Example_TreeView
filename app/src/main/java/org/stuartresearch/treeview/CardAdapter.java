@@ -1,7 +1,6 @@
 package org.stuartresearch.treeview;
 
 import android.content.res.Resources;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,6 +44,38 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return data.size();
     }
 
+    public void expandAll() {
+        for (int i = 0; i < data.size(); i++) {
+            expandEntry(data.get(i), i);
+        }
+    }
+
+    public void collapseAll() {
+        for (int i = 0; i < data.size(); i++) {
+            collapseEntry(data.get(i), i);
+        }
+    }
+
+    public void expandEntry(TreeEntry entry) {
+        int index = data.indexOf(entry);
+        expandEntry(entry, index);
+    }
+
+    public void collapseEntry(TreeEntry entry) {
+        int index = data.indexOf(entry);
+        collapseEntry(entry, index);
+    }
+
+    public void expandEntry(TreeEntry entry, int index) {
+        for (int i = 0; i < entry.children.size(); i++)
+            data.add(index + 1 + i, entry.children.get(i));
+    }
+
+    public void collapseEntry(TreeEntry entry, int index) {
+        for (int i = 0; i < entry.children.size(); i++)
+            data.remove(index + 1);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView text;
         public CardView card;
@@ -59,18 +90,19 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            final Snackbar snackBar = Snackbar.make(v, Integer.toString(getAdapterPosition()), Snackbar.LENGTH_SHORT);
-                    snackBar.setAction("close", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            snackBar.dismiss();
-                        }
-                    });
-            snackBar.show();
+            TreeEntry entry = data.get(getAdapterPosition());
 
-            data.remove(getAdapterPosition());
+            if (entry.isExpanded) {
+                collapseEntry(entry);
+            } else {
+                expandEntry(entry);
+            }
+
+            entry.isExpanded = !entry.isExpanded;
             notifyDataSetChanged();
+            return;
         }
+
     }
 
 }
