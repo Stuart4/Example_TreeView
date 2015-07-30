@@ -12,8 +12,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    MenuItem toggleExpand;
+
     public RecyclerView recyclerView;
+    public CardAdapter adapter;
     public String[] countries;
+    public boolean isAllExpanded = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<TreeEntry> data = buildData();
 
-        CardAdapter adapter = new CardAdapter(data);
+        adapter = new CardAdapter(data);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        toggleExpand = (MenuItem) menu.findItem(R.id.toggle_expand);
         return true;
     }
 
@@ -50,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.toggle_expand) {
+            if (isAllExpanded) {
+                adapter.collapseAll();
+                toggleExpand.setIcon(R.drawable.ic_unfold_more_black_24dp);
+            } else {
+                adapter.expandAll();
+                toggleExpand.setIcon(R.drawable.ic_unfold_less_black_24dp);
+            }
+            isAllExpanded = !isAllExpanded;
         }
 
         return super.onOptionsItemSelected(item);
