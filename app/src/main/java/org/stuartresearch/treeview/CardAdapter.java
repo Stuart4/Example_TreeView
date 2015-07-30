@@ -45,14 +45,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     public void expandAll() {
-        for (int i = 0; i < data.size(); i++) {
+        int size = data.size();
+        for (int i = 0; i < size; i++) {
             expandEntry(data.get(i), i);
         }
         notifyDataSetChanged();
     }
 
     public void collapseAll() {
-        for (int i = 0; i < data.size(); i++) {
+        int size = data.size();
+        for (int i = 0; i < size; i++) {
             collapseEntry(data.get(i), i);
         }
         notifyDataSetChanged();
@@ -71,12 +73,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     private void expandEntry(TreeEntry entry, int index) {
-        for (int i = 0; i < entry.children.size(); i++)
+        int size = entry.children.size();
+        for (int i = 0; i < size; i++)
             data.add(index + 1 + i, entry.children.get(i));
     }
 
     private void collapseEntry(TreeEntry entry, int index) {
-        for (int i = 0; i < entry.children.size(); i++)
+        int size = entry.children.size();
+        for (int i = 0; i < size; i++)
             data.remove(index + 1);
     }
 
