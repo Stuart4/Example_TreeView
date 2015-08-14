@@ -45,17 +45,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     public void expandAll() {
-        int size = data.size();
-        for (int i = 0; i < size; i++) {
-            expandEntry(data.get(i), i);
+        for (int i = 0; i < data.size(); i++) {
+            TreeEntry entry = data.get(i);
+            expandEntry(entry, i);
         }
         notifyDataSetChanged();
     }
 
     public void collapseAll() {
-        int size = data.size();
-        for (int i = 0; i < size; i++) {
-            collapseEntry(data.get(i), i);
+        for (int i = 0; i < data.size(); i++) {
+            TreeEntry entry = data.get(i);
+            collapseEntry(entry, i);
         }
         notifyDataSetChanged();
     }
@@ -74,14 +74,26 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private void expandEntry(TreeEntry entry, int index) {
         int size = entry.children.size();
-        for (int i = 0; i < size; i++)
-            data.add(index + 1 + i, entry.children.get(i));
+        for (int i = 0; i < size; i++) {
+            TreeEntry child = entry.children.get(i);
+            if (child.indent == entry.indent + 1) {
+                data.add(index + 1 + i, child);
+
+                if (child.isExpanded) {
+                    expandEntry(child, index + i);
+                }
+            }
+        }
+
+        entry.isExpanded = true;
     }
 
     private void collapseEntry(TreeEntry entry, int index) {
         int size = entry.children.size();
         for (int i = 0; i < size; i++)
             data.remove(index + 1);
+
+        entry.isExpanded = false;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
